@@ -73,16 +73,16 @@ class ObjectTracked:
         scan_frequency = rospy.get_param("scan_frequency", 7.5)
         delta_t = 1./scan_frequency
         if scan_frequency > 7.49 and scan_frequency < 7.51:
-            std_process_noise = 0.06666
+            std_process_noise = 0.01
         elif scan_frequency > 9.99 and scan_frequency < 10.01:
-            std_process_noise = 0.05
+            std_process_noise = 0.008
         elif scan_frequency > 14.99 and scan_frequency < 15.01:
-            std_process_noise = 0.03333
+            std_process_noise = 0.005
         else:
             print("Scan frequency needs to be either 7.5, 10 or 15 or the standard deviation of the process noise needs to be tuned to your scanner frequency")
         std_pos = std_process_noise
         std_vel = std_process_noise
-        std_obs = 0.1
+        std_obs = 0.05
         var_pos = std_pos**2
         var_vel = std_vel**2
         # The observation noise is assumed to be different when updating the Kalman filter than when doing data association
@@ -95,7 +95,7 @@ class ObjectTracked:
         self.vel_x = 0
         self.vel_y = 0
 
-        self.filtered_state_covariances = 0.5*np.eye(4) 
+        self.filtered_state_covariances = 2.0*np.eye(4)
 
         # Constant velocity motion model
         transition_matrix = np.array([[1, 0, delta_t,        0],
